@@ -1,0 +1,60 @@
+cmake_minimum_required(VERSION 2.8.4)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
+project(GCFXSOEM C)
+
+if(WIN32)
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  set(OS "win32")
+  include_directories(SOEM/oshw/win32/wpcap/Include)
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    link_directories(${CMAKE_SOURCE_DIR}/SOEM/oshw/win32/wpcap/Lib/x64)
+  elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    link_directories(${CMAKE_SOURCE_DIR}/SOEM/oshw/win32/wpcap/Lib)
+  endif()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /D _CRT_SECURE_NO_WARNINGS")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  /WX")
+  set(OS_LIBS wpcap.lib Packet.lib Ws2_32.lib Winmm.lib)
+elseif(UNIX)
+  set(OS "linux")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")
+  set(OS_LIBS pthread rt)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "rt-kernel")
+  set(OS "rtk")
+  message("ARCH is ${ARCH}")
+  message("BSP is ${BSP}")
+  include_directories(SOEM/oshw/${OS}/${ARCH})
+  file(GLOB OSHW_EXTRA_SOURCES SOEM/oshw/${OS}/${ARCH}/*.c)
+  set(OSHW_SOURCES "${OS_HW_SOURCES} ${OSHW_ARCHSOURCES}")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-but-set-variable")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-function")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-format")
+  set(OS_LIBS "-Wl,--start-group -l${BSP} -l${ARCH} -lkern -ldev -lsio -lblock -lfs -lusb -llwip -leth -li2c -lrtc -lcan -lnand -lspi -lnor -lpwm -ladc -ltrace -lc -lm -Wl,--end-group")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "rtems")
+  message("Building for RTEMS")
+  set(OS "rtems")
+endif()
+
+message("OS is ${OS}")
+
+file(GLOB GCFX_SOURCES gcodefx/*.c)
+file(GLOB SOEM_SOURCES SOEM/soem/*.c)
+file(GLOB OSAL_SOURCES SOEM/osal/${OS}/*.c)
+file(GLOB OSHW_SOURCES SOEM/oshw/${OS}/*.c)
+
+file(GLOB SOEM_HEADERS SOEM/soem/*.h)
+file(GLOB OSAL_HEADERS SOEM/osal/osal.h SOEM/osal/${OS}/*.h)
+file(GLOB OSHW_HEADERS SOEM/oshw/${OS}/*.h)
+
+include_directories(SOEM/soem)
+include_directories(SOEM/osal)
+include_directories(SOEM/osal/${OS})
+include_directories(SOEM/oshw/${OS})
+
+add_library(gcfxsoem SHARED
+  ${GCFX_SOURCES}
+  ${SOEM_SOURCES}
+  ${OSAL_SOURCES}
+  ${OSHW_SOURCES}
+  ${OSHW_EXTRA_SOURCES})
+target_link_libraries(gcfxsoem ${OS_LIBS})
