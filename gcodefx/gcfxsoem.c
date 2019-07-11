@@ -56,6 +56,8 @@ ecx_contextt * ec_malloc_context(void)
 	ecx_context->eepSM				= ec_SM;
 	ecx_context->eepFMMU			= ec_FMMU;
 	ecx_context->FOEhook			= NULL;
+    ecx_context->EOEhook			= NULL;
+    ecx_context->manualstatechange  = 0;
 	return ecx_context;
 }
 
