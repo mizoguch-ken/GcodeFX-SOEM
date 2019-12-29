@@ -47,8 +47,6 @@ ecx_contextt * ec_malloc_context(void)
 	ecx_context->elist				= ec_elist;
 	ecx_context->idxstack			= ec_idxstack;
 	ecx_context->ecaterror			= EcatError;
-	ecx_context->DCtO				= 0;
-	ecx_context->DCl				= 0;
 	ecx_context->DCtime				= ec_DCtime;
 	ecx_context->SMcommtype			= ec_SMcommtype;
 	ecx_context->PDOassign			= ec_PDOassign;
