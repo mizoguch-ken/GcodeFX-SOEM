@@ -11,6 +11,12 @@ Windows (Visual Studio)
 -----------------------
  * Start a Visual Studio command prompt then:
    * download and copy Simple Open EtherCAT Master Library to SOEM directory
+   * `cd SOEM`
+   * `mkdir build`
+   * `cd build`
+   * `cmake .. -G "NMake Makefiles"`
+   * `nmake`
+   * `cd ../../`
    * `mkdir build`
    * `cd build`
    * `cmake .. -G "NMake Makefiles"`
@@ -19,6 +25,12 @@ Windows (Visual Studio)
 Linux
 -----
    * download and copy Simple Open EtherCAT Master Library to SOEM directory
+   * `cd SOEM`
+   * `mkdir build`
+   * `cd build`
+   * `cmake ..`
+   * `make`
+   * `cd ../../`
    * `mkdir build`
    * `cd build`
    * `cmake ..`
