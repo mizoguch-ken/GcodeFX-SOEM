@@ -14,12 +14,12 @@ Windows (Visual Studio)
    * `cd SOEM`
    * `mkdir build`
    * `cd build`
-   * `cmake .. -G "NMake Makefiles"`
+   * `cmake .. -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles"`
    * `nmake`
    * `cd ../../`
    * `mkdir build`
    * `cd build`
-   * `cmake .. -G "NMake Makefiles"`
+   * `cmake .. -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles"`
    * `nmake`
 
 Linux
