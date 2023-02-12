@@ -63,6 +63,7 @@ EXPORTS
 	ecx_receive_processdata_group
 	ecx_send_processdata
 	ecx_send_overlap_processdata
+	ecx_config_map_group_aligned
 	ecx_receive_processdata
 	ecx_send_processdata_group
 	ecx_configdc
